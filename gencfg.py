@@ -371,12 +371,11 @@ def update():
     acl_access += 'acl Safe_ports port 488		# gss-http\n'
     acl_access += 'acl Safe_ports port 591		# filemaker\n'
     acl_access += 'acl Safe_ports port 777		# multiling http\n'
-
     # MSN rules
-    #acl_access += \
-    #    'acl MSNICQGTALK_sites url_regex -i ^messenger.hotmail.com ^nexus.passport.com ^login.live.com ^gateway.messenger.hotmail.com ^login.oscar.aol.com talk.google.com .*messenger .*icq .*gtalk .*msn.com meebo.com iloveim.com ebuddy.commsn2go.com e-messenger.net imo.im messengerfx.com webmessenger.com e-messenger.com communicationtube.net msn2go.com webmessenger.com.br ebuddy.com e-buddy.com gateway.dll .microsoft.com  evsecure-crl.verisign.com crl.verisign.com mscrl.microsoft.com crl.microsoft.com\n'
-    #acl_access += \
-    #    'acl MSN_mime req_mime_type -i ^application/x-msn-messenger\n'
+    acl_access += \
+        'acl MSNICQGTALK_sites url_regex -i ^messenger.hotmail.com ^nexus.passport.com ^login.live.com ^gateway.messenger.hotmail.com ^login.oscar.aol.com talk.google.com .*messenger .*icq .*gtalk .*msn.com meebo.com iloveim.com ebuddy.commsn2go.com e-messenger.net imo.im messengerfx.com webmessenger.com e-messenger.com communicationtube.net msn2go.com webmessenger.com.br ebuddy.com e-buddy.com gateway.dll .microsoft.com  evsecure-crl.verisign.com crl.verisign.com mscrl.microsoft.com crl.microsoft.com\n'
+    acl_access += \
+        'acl MSN_mime req_mime_type -i ^application/x-msn-messenger\n'
 
     for group_id in a.get_group_list():
         group = a.get_group(group_id)
