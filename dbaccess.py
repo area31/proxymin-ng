@@ -16,7 +16,7 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-import ConfigParser
+import configparser
 import shelve
 
 import accessobjects
@@ -26,7 +26,7 @@ import htpasswd
 from globals import *
 
 # first read the configuration file
-config = ConfigParser.ConfigParser()
+config = configparser.ConfigParser()
 config.read(CONFIG_FILE_PATH + CONFIG_FILE)
 
 # if the dbase-files do not exist they are created automatically
@@ -46,8 +46,8 @@ class DBAccess:
         """get a list of all existing hosts\n
         returns a list that contains any existing host IP\n
         returns an empty list if no host exists"""
-        hosts = self.hosts.keys()
-        hosts.sort()
+        hosts = list(self.hosts.keys())
+        hosts = sorted(hosts)
         return hosts
  
     def get_host(self, ip):
@@ -100,8 +100,8 @@ class DBAccess:
         """get a list of all existing users\n
         returns a list that contains any existing user-ID\n
         returns an empty list if no users exists"""
-        users = self.users.keys()
-        users.sort()
+        users = list(self.users.keys())
+        users = sorted(users)
         return users
 
     def get_user(self, uid):
@@ -156,8 +156,8 @@ class DBAccess:
         """get a list of all existing groups\n
         returns a list that contains any existing group-ID\n
         returns an empty list if no groups exists"""
-        groups = self.groups.keys()
-        groups.sort()
+        groups = list(self.groups.keys())
+        groups = sorted(groups)
         return groups
  
     def get_group(self, gid):
@@ -225,7 +225,7 @@ class DBAccess:
             user = self.get_user(uid)
             if user.get_group() == gid:
                 members.append(uid)
-        members.sort()
+        members.sorted()
         return members
 
     def get_group_member_hosts(self, gid):
@@ -237,5 +237,5 @@ class DBAccess:
             host = self.get_host(ip)
             if host.get_group() == gid:
                 members.append(ip)
-        members.sort()
+        members.sorted()
         return members

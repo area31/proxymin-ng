@@ -21,7 +21,7 @@ import os
 import string
 import sys
 
-import ConfigParser
+import configparser
 
 import dbaccess
 import gui_misc
@@ -93,4 +93,4 @@ def print_details_form(id, action):
     html_string += '</body>\n'
     html_string += '<script>resizeWinTo( \'resize_div\' );</script>\n'
     html_string += '</html>'
-    print html_string
+    print (html_string)

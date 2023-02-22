@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 # -*- coding: latin-1 -*-
 
 #proxymin - A Web-based administration frontend for the Squid Web proxy cache
@@ -34,11 +34,11 @@ import gui_info
 import gui_main
 import gui_misc
 import gui_permission_details
-import ConfigParser
+import configparser
 from localization import _
 from globals import *
 
-config = ConfigParser.ConfigParser()
+config = configparser.ConfigParser()
 config.read(CONFIG_FILE_PATH + CONFIG_FILE)
 global user_password
 user_password = config.get("password","user_password")
@@ -69,44 +69,44 @@ extension_list = []
 # extract all POST and FORM values    
 form = cgi.FieldStorage()
 # extract parameters
-if form.has_key('action'):
+if 'action' in form:
     action = form['action'].value
-if form.has_key('category'):
+if 'category' in form:
     category = form['category'].value
-if form.has_key('id'):
+if 'id' in form:
     id = form['id'].value
-if form.has_key('group'):
+if 'group' in form:
     group = form['group'].value
-if form.has_key('description'):
+if 'description' in form:
     description = form['description'].value
-if form.has_key('passwd1'):
+if 'passwd1' in form:
     passwd1 = form['passwd1'].value
-if form.has_key('passwd2'):
+if 'passwd2' in form:
     passwd2 = form['passwd2'].value
-if form.has_key('active'):
+if 'active' in form:
     active = form['active'].value
-if form.has_key('letter'):
+if 'letter' in form:
     letter = form['letter'].value
-if form.has_key('ssl'):
+if 'ssl' in form:
     ssl = form['ssl'].value
-if form.has_key('msn'):
+if 'msn' in form:
     msn = form['msn'].value
-if form.has_key('bandwidth_limit'):
+if 'bandwidth_limit' in form:
     bandwidth_limit = form['bandwidth_limit'].value
-if form.has_key('default'):
+if 'default' in form:
     default = form['default'].value
 for key in form.keys():
     if key[:9] == 'url_list_':
         index = int(key[9:])
         url_list.append(form['url_list_%i' % index].value)
         # group has no url status
-        if form.has_key('url_status_list_%i' % index):
+        if 'url_status_list_%i' % index in form:
             url_status_list.append(form['url_status_list_%i' % index].value)
     elif key[:15] == 'extension_list_':
         index = int(key[15:]) 
         extension_list.append(form['extension_list_%i' % index].value)
             
-print 'Content-type: text/html\n\n'
+print ("Content-type: text/html\n\n")
 # call appropriate page
 if(action == ACTION_SHOW_MAIN):
     gui_main.print_main_page(category, letter, group)

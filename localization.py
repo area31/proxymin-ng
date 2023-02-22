@@ -20,7 +20,7 @@
 import os
 import string
 
-import ConfigParser
+import configparser
 
 from globals import *
 
@@ -46,24 +46,25 @@ def umlaut_encode(to_encode):
     return encoded
 
 def _(to_translate):
-    config = ConfigParser.ConfigParser()
+    config = configparser.ConfigParser()
     config.read(CONFIG_FILE_PATH + "proxymin.conf")
     lang_dir = config.get("files","lang_dir")
     lang = config.get("parameters","language")
     filename = lang_dir + 'lang_' + lang
-    
+
     if(os.access(filename,os.R_OK)):
-        file = open(filename)       
+        file = open(filename)
     else:
         return to_translate
-    
+
     for line in file.readlines():
         # ignore comments
         if(line[0] == '#'):
             continue
-        if(string.split(string.split(line, '::')[0], "'")[1] == to_translate):
+        if(line.split("::")[0].split("'")[1] == to_translate):
             file.close()
-            return umlaut_encode(string.split(string.split(line, '::')[1], "'")[1])
-        
-    return to_translate
+            return umlaut_encode(line.split("::")[1].split("'")[1])
+
     file.close()
+    return to_translate
+

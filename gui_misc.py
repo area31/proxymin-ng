@@ -19,7 +19,7 @@
 import os
 import string
 
-import ConfigParser
+import configparser
 
 import dbaccess
 import objectiterator
@@ -27,15 +27,15 @@ from globals import *
 from localization import _
 
 def print_html_head(title=PROGRAM_NAME):
-    print '<html><head><title>%s</title>' % title
+    print ('<html><head><title>%s</title>' % title)
     print_encoding()
     print_java_scripts()
     print_css()
-    print '</head>'
+    print ('</head>')
 
 def print_java_scripts():
 
-    config = ConfigParser.ConfigParser()
+    config = configparser.ConfigParser()
     config.read(CONFIG_FILE_PATH + CONFIG_FILE)
     
     values = {'default_width':JS_WIDTH_DEFAULT,
@@ -95,12 +95,12 @@ function resizeWinTo( idOfDiv ) {
 }
 //-->
 </SCRIPT>"""
-    print template % values
+    print (template % values)
 
 def print_css():
-    css_file= open(CSS_FILE,'r')
+    css_file = open(CSS_FILE,'r')
     for line in css_file.readlines():
-        print line,
+        print(line, end='')
     css_file.close()
 
 def is_alphanum(input):
@@ -123,23 +123,24 @@ def is_ip(input):
             return 0    
     return 1
 
-def print_popup_head(colspan, title='', error_message = ''):   
-    print '<HTML><HEAD><TITLE>%s</TITLE>' % (title)    
+def print_popup_head(colspan, title='', error_message=''):
+    print('<HTML><HEAD><TITLE>%s</TITLE>' % (title))
     print_encoding()
     print_css()
     print_java_scripts()
-    print '</HEAD><BODY>'
-    print '<div style="position:absolute;left:0px;top:0px;width:0px;" id="resize_div">'
-    print '<center><table border=0 CELLSPACING=2 CELLPADDING=3>\n'
-    print '<tr class="titlebar"><td class="title" colspan=%s><nobr>%s</nobr></td></tr>' % (colspan, title)
-    if(error_message != ''):  
-        print '<tr><td colspan="%s" class="statusbar">' % (colspan)
-        print '<b>%s</b></td></tr>' % (error_message)
-    print '<tr><td colspan="%s">&nbsp;</td><tr>' % (colspan)
+    print('</HEAD><BODY>')
+    print('<div style="position:absolute;left:0px;top:0px;width:0px;" id="resize_div">')
+    print('<center><table border=0 CELLSPACING=2 CELLPADDING=3>\n')
+    print('<tr class="titlebar"><td class="title" colspan=%s><nobr>%s</nobr></td></tr>' % (colspan, title))
+    if error_message != '':
+        print('<tr><td colspan="%s" class="statusbar">' % (colspan))
+        print('<b>%s</b></td></tr>' % (error_message))
+    print('<tr><td colspan="%s">&nbsp;</td><tr>' % (colspan))
+
 
 def print_footer():
     # read the configuration file
-    config = ConfigParser.ConfigParser()
+    config = configparser.ConfigParser()
     config.read(CONFIG_FILE_PATH + CONFIG_FILE)
     
     html_string = '<center><font class="footer">'
@@ -147,12 +148,12 @@ def print_footer():
     html_string += 'powered by <a href="%s" TARGET="blank">%s</a>\n' % (PROJECT_HOMEPAGE, PROGRAM_NAME)
     html_string += '</font></center>\n'
     html_string += '</body></html>\n'
-    print html_string
+    print (html_string)
 
 def print_encoding():
-    config = ConfigParser.ConfigParser()
+    config = configparser.ConfigParser()
     config.read(CONFIG_FILE_PATH + CONFIG_FILE)
-    print '<meta http-equiv="Content-Type" content="text/html; charset=%s">\n' % config.get("parameters", "encoding")
+    print ('<meta http-equiv="Content-Type" content="text/html; charset=%s">\n' % config.get("parameters", "encoding"))
 
 def group_selector(default_group = ''):
     dba = dbaccess.DBAccess()

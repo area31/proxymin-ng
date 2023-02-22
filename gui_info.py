@@ -83,6 +83,6 @@ for your suggestions, requests and bugfixes please send an email to <a href="mai
 </td></tr></table>
 <br>
 """
-    print template % values
+    print (template % values)
 
     gui_misc.print_footer()

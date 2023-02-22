@@ -210,6 +210,6 @@ def print_help_page():
         <a href="mailto:%(contact_email)s">%(contact_email)s</a></center>
 <br>
 """
-    print template % values
+    print (template % values)
 
     gui_misc.print_footer()

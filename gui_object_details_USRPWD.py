@@ -21,7 +21,7 @@ import os
 import string
 import sys
 
-import ConfigParser
+import configparser
 
 import dbaccess
 import gui_misc

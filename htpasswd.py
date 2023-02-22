@@ -21,12 +21,12 @@ import random
 import string
 import os
 
-import ConfigParser
+import configparser
 
 global htpasswd_file 
 from globals import *
 
-config = ConfigParser.ConfigParser()
+config = configparser.ConfigParser()
 config.read(CONFIG_FILE_PATH + CONFIG_FILE)
 
 htpasswd_file = config.get("files","htpasswd_file")

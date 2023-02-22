@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 
 #proxymin - A Web-based administration frontend for the Squid Web proxy cache
 #Copyright (C) 2004  Mirjam Kuhlmann (proxymin@mikuhl.de)
