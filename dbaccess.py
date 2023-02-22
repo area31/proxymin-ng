@@ -18,7 +18,8 @@
 
 import configparser
 import shelve
-import sys
+import pickle
+import bsddb3
 import accessobjects
 import gencfg
 import group
@@ -37,15 +38,9 @@ groupdb = config.get("files","db_dir") + "/groups"
 class DBAccess:
     """persistence framework"""
     def __init__(self):
-        # Convert all keys in the shelve databases from bytes to strings
-        self.users = shelve.open(userdb, flag='c', writeback=True)
-        self.hosts = shelve.open(hostdb, flag='c', writeback=True)
-        self.groups = shelve.open(groupdb, flag='c', writeback=True)
-
-        if sys.version_info.major == 3:
-            self.users = {key.decode(): value for key, value in self.users.items()}
-            self.hosts = {key.decode(): value for key, value in self.hosts.items()}
-            self.groups = {key.decode(): value for key, value in self.groups.items()}
+        self.users = shelve.Shelf(bsddb3.btopen(userdb, 'c'))
+        self.hosts = shelve.Shelf(bsddb3.btopen(hostdb, 'c'))
+        self.groups = shelve.Shelf(bsddb3.btopen(groupdb, 'c'))
 
     def get_host_list(self):
         """get a list of all existing hosts\n
@@ -59,7 +54,8 @@ class DBAccess:
         """get the host object associated with "ip"\n
         returns the according host-object if a host with the given IP exists\n
         returns False otherwise"""
-        if gid in self.hosts:
+#        if self.hosts.has_key(ip):
+        if ip in self.hosts:
             return self.hosts[ip]
         # returns False in case host does not exist
         return False
@@ -113,7 +109,8 @@ class DBAccess:
         """get the user object associated with "uid"\n
         returns the according user-object if a user with the given uid exists\n
         returns False otherwise"""
-        if gid in self.users:
+#        if self.users.has_key(uid):
+        if uid in self.users:
             return self.users[uid]
         # return False if uid does not exist 
         return False
@@ -169,7 +166,9 @@ class DBAccess:
         """get the group object associated with "gid"\n
         returns the according group-object if a group with the given gid exists\n
         returns False otherwise"""
+#        if self.groups.has_key(gid):
         if gid in self.groups:
+#            return pickle.loads(self.groups[gid])
             return self.groups[gid]
         # notify the caller if gid does not exist 
         return False
@@ -181,6 +180,7 @@ class DBAccess:
         if gid not in self.get_group_list():
             newgroup = group.Group()
             newgroup.set_gid(gid)
+#            self.groups[gid.encode()] = pickle.dumps(newgroup)
             self.groups[gid] = newgroup
             return True
         # notify the caller in case the gid already exists
@@ -215,7 +215,6 @@ class DBAccess:
         if group.get_gid() in self.get_group_list():
             self.groups[group.get_gid()] = group
             # the close is needed to flush the shelve to disk
-            self.groups.sync()
             self.groups.close()
             gencfg.update()
             return True
@@ -231,7 +230,7 @@ class DBAccess:
             user = self.get_user(uid)
             if user.get_group() == gid:
                 members.append(uid)
-        members.sorted()
+        members.sort()
         return members
 
     def get_group_member_hosts(self, gid):
@@ -243,5 +242,5 @@ class DBAccess:
             host = self.get_host(ip)
             if host.get_group() == gid:
                 members.append(ip)
-        members.sorted()
+        members.sort()
         return members

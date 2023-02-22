@@ -55,7 +55,7 @@ def getUserNames():
     users = []
     for l in lines:
         if l != "\n":
-            users.append(string.split(l,':')[0])
+            users.append(l.split(':')[0])
     myfile.close()
     return users
 
@@ -65,7 +65,9 @@ def getUsers():
     users = []
     for l in lines:
         if l != "\n":
-            users.append((string.split(l,':')[0],string.split(l,':')[1][:-1]))
+#            users.append((string.split(l,':')[0],string.split(l,':')[1][:-1]))
+            users.append((l.split(':')[0], l.split(':')[1][:-1]))
+
     myfile.close()
     return users
 

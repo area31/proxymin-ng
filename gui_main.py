@@ -1,5 +1,3 @@
-#!/usr/bin/python
-# -*- coding: utf-8 -*-
 # proxymin - A Web-based administration frontend for the Squid Web proxy cache
 # Copyright (C) 2004  Mirjam Kuhlmann (proxymin@mikuhl.de)
 # Copyright (C) 2004  Clemens Hermann (proxymin@clhe.de)
@@ -57,21 +55,18 @@ def alphabet(category, group=None):
                 group), string.ascii_lowercase[i]))
     print ('</center>')
 
-
 def print_title_bar():
-
     # count all user/host/group objects
-
     iterator = objectiterator.ObjectIterator(CATEGORY_HOSTS)
-    number_of_hosts = iterator.get_object_count()
+    number_of_hosts = iterator.get_object_count() or 0
     iterator.set_category(CATEGORY_USERS)
-    number_of_users = iterator.get_object_count()
+    number_of_users = iterator.get_object_count() or 0
     iterator.set_category(CATEGORY_GROUPS)
-    number_of_groups = iterator.get_object_count()
+    number_of_groups = iterator.get_object_count() or 0
     values = {
         'program_name': PROGRAM_NAME,
         'program_version': PROGRAM_VERSION,
-        'script_name': os.environ['SCRIPT_FILENAME'],
+        'script_name': os.environ['SCRIPT_NAME'],
         'query_string': os.environ['QUERY_STRING'],
         'window_help': WINDOW_HELP,
         'window_info': WINDOW_INFO,
@@ -92,7 +87,8 @@ def print_title_bar():
         'page_help_width': PAGE_HELP_WIDTH,
         'page_info_height': PAGE_INFO_HEIGHT,
         'page_info_width': PAGE_INFO_WIDTH,
-        }
+    }
+
     template = \
         """
 <body>

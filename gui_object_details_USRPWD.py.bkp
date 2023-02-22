@@ -119,7 +119,7 @@ def print_confirmation_page(error_message, category, action, id, description, gr
     gui_misc.print_popup_head(2, title, error_message)
     print_details_form(category,action, id, description, group, active)
 
-def validate_input_data(category, action, id):
+def validate_input_data(category, action, id, passwd1, passwd2):
     """check if input data is valid"""
     if(category == CATEGORY_USERS):
         id_name = _('User-ID')
@@ -139,37 +139,37 @@ def validate_input_data(category, action, id):
     # check if valid IP
     elif(category == CATEGORY_HOSTS and not gui_misc.is_ip(id)):
         error_message = _('no valid IP-Address')
-#    elif(category == CATEGORY_USERS and passwd1 != passwd2):
-#        error_message = _('passwords do not match')
-#    elif(category == CATEGORY_USERS and passwd1 == ''):
-#        error_message = _('no password specified')
-#    elif(category == CATEGORY_USERS and
-#         action == ACTION_SAVE_EDIT and not
-#         (gui_misc.is_alphanum(passwd1) or passwd1 == PASSWORD_UNCHANGED)):
-#        error_message = _('ass password only alpanumeric characters and "_" are allowed')
+    elif(category == CATEGORY_USERS and passwd1 != passwd2):
+        error_message = _('passwords do not match')
+    elif(category == CATEGORY_USERS and passwd1 == ''):
+        error_message = _('no password specified')
+    elif(category == CATEGORY_USERS and
+         action == ACTION_SAVE_EDIT and not
+         (gui_misc.is_alphanum(passwd1) or passwd1 == PASSWORD_UNCHANGED)):
+        error_message = _('ass password only alpanumeric characters and "_" are allowed')
     # is id already in use?
     elif(action == ACTION_SAVE_CREATE):
         if id in iterator.get_object_id_list():
             error_message = id_name + ' ' + _('already exists')
     return error_message
 
-def save_input_data(category, id, description, group='', active=False):
+def save_input_data(category, id, description, group = '', active = FALSE, passwd = ''):
     iterator = objectiterator.ObjectIterator(category)
     # check if object already exists, if not, then create it
     if not(iterator.get_object(id)):
         iterator.add_object(id)
     object = iterator.get_object(id)
-    if object is not None:
-        object.set_description(description)
-        if category != CATEGORY_GROUPS:
-            object.set_group(group)
-            if active:
-                object.enable()
-            else:
-                object.disable()
-        iterator.update_object(object)
-    else:
-        print('Error: object is None')
+    if(category == CATEGORY_USERS):
+    	if(passwd != PASSWORD_UNCHANGED):
+	    object.set_password(passwd)
+    object.set_description(description)
+    if(category != CATEGORY_GROUPS):
+        object.set_group(group)
+        if(active):
+            object.enable()
+        else:
+            object.disable()
+    iterator.update_object(object)
 
 def delete_object(category, id):
     iterator = objectiterator.ObjectIterator(category)
@@ -224,13 +224,25 @@ def print_details_form(category,action, id='', description='', group='', active=
         else:
             html_string += '<input type="hidden" name="group" value="%s">%s' % (group, group)
         html_string += '</td>\n</tr>\n'    
+    if(category == CATEGORY_USERS):
+        if(action == ACTION_CREATE or action == ACTION_EDIT):
+            if(action == ACTION_EDIT):
+                password = PASSWORD_UNCHANGED
+            else:
+                password = ''
+            html_string += '<tr><th align=right>%s</th>\n' % (_('Password'))
+            html_string += '<td class = "%s" align=left><input type="password" name="passwd1" value="%s" size="9"></td></tr>\n' \
+                           % (row_format.get_next_row_class(), password)
+            html_string += '<tr><th align=right>%s</th>\n' % (_('Password'))
+            html_string += '<td class = "%s" align=left><input type="password" name="passwd2" value="%s" size="9"></td></tr>\n' \
+                           % (row_format.get_next_row_class(), password)
     if(category == CATEGORY_USERS or category == CATEGORY_HOSTS):   
         html_string += '<tr><th align=right>%s</th>' % (_('active'))
         html_string += '<td class = "%s" align=left>'% (row_format.get_next_row_class())
         if(action == ACTION_CREATE or action == ACTION_EDIT):
             html_string += '<input type="checkbox" name="active"' 
             if(active):
-                html_string += 'checked="checked"'
+                html_string += 'checked="checked">'
         else:
             if(active):
                 html_string += _('yes')
@@ -254,4 +266,4 @@ def print_details_form(category,action, id='', description='', group='', active=
     html_string += '</body>\n'
     html_string += '<script>resizeWinTo(\'resize_div\');</script>\n'
     html_string += '</html>'
-    print (html_string)
+    print html_string

@@ -65,13 +65,15 @@ class AccessObject(Bandwidth):
  
     def get_http_url_list(self):
         """returns a list containing any allowed or denied HTTP urls"""
-        urls = self.httpurls.keys()
+        #urls = self.httpurls.keys()
+        urls = list(self.httpurls.keys())
         urls.sort()
         return urls
     
     def get_ftp_url_list(self):
         """returns a list containing any allowed or denied FTP urls"""
-        urls = self.ftpurls.keys()
+#        urls = self.ftpurls.keys()
+        urls = list(self.ftpurls.keys())
         urls.sort()
         return urls
 

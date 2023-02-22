@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # proxymin - A Web-based administration frontend for the Squid Web proxy cache
 # Copyright (C) 2004  Mirjam Kuhlmann (proxymin@mikuhl.de)
 # Copyright (C) 2004  Clemens Hermann (proxymin@clhe.de)

@@ -104,7 +104,7 @@ def print_css():
     css_file.close()
 
 def is_alphanum(input):
-    valid_chars = string.letters + string.digits + "_" + "-" + "." + "\\"
+    valid_chars = string.ascii_letters + string.digits + "_" + "-" + "." + "\\"
     for char in input:
         if char not in valid_chars:
             return FALSE
