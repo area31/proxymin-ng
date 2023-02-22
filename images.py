@@ -24,13 +24,14 @@ import urllib
 
 from globals import *
 
-print "Content-Type: image/gif"
+print ("Content-Type: image/gif")
 print
 
 # extract all POST and FORM values    
 form = cgi.FieldStorage()
 
-if form.has_key(IMAGE_GET_VARIABLE):
+#if form.has_key(IMAGE_GET_VARIABLE):
+if IMAGE_GET_VARIABLE in form:
     image = form[IMAGE_GET_VARIABLE].value
 
 if(image == IMAGE_BALL_RED):

@@ -115,11 +115,13 @@ def is_ip(input):
     for char in input:
         if char not in valid_chars:
             return 0
-    segments = string.split(input, '.')
+#    segments = string.split(input, '.')
+    segments = input.split('.')
     if len(segments) != 4:
         return 0
     for segment in segments:
-        if(string.atoi(segment) > 255):
+#        if(string.atoi(segment) > 255):
+        if(int(segment) > 255):
             return 0    
     return 1
 

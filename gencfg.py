@@ -54,7 +54,8 @@ def create_acl(
     if category == CATEGORY_GROUPS:
         object_string = 'g_' + id
     elif category == CATEGORY_HOSTS:
-        object_string = 'h_' + string.replace(id, '.', '_')
+#        object_string = 'h_' + string.replace(id, '.', '_')
+        object_string = 'h_' + id.replace('.', '_')
     else:
         object_string = 'u_' + id
     result = 'acl ' + object_string + '_'
@@ -192,7 +193,9 @@ def create_http_access(id, category):
     a = dbaccess.DBAccess()
     if category == CATEGORY_HOSTS:
         object = a.get_host(id)
-        object_string = 'h_' + string.replace(id, '.', '_')
+#        object_string = 'h_' + string.replace(id, '.', '_')
+        object_string = 'h_' + id.replace('.', '_')
+
     else:
         object = a.get_user(id)
         object_string = 'u_' + id
@@ -403,7 +406,8 @@ def update():
 
     for ip in a.get_host_list():
         host = a.get_host(ip)
-        acl_hosts += 'acl h_' + string.replace(ip, '.', '_') + ' src ' \
+#        acl_hosts += 'acl h_' + string.replace(ip, '.', '_') + ' src ' \
+        acl_hosts += 'acl h_' + str.replace(ip, '.', '_') + ' src ' \
             + ip + '/32\n'
         if host.is_enabled():
             urls_allowed = []
