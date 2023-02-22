@@ -219,9 +219,8 @@ class DBAccess:
             self.groups.close()
             gencfg.update()
             return True
-        else:
         # notify the caller in case the group did not exists
-            return False
+        return False
 
     def get_group_member_users(self, gid):
         """get a list of all UIDs of the memners of this group\n

@@ -349,21 +349,31 @@ def update():
     acl_bandwidth_rules = []
     http_access = ''
     acl_access = \
-        '# desativado no squid 3 #acl all src 0.0.0.0/0.0.0.0\n'
-    acl_access += 'acl ftp_ports port 21\n'
-    acl_access += 'acl http_ports port 80-10000\n'
+    'acl localnet src 0.0.0.1-0.255.255.255	# RFC 1122 "this" network (LAN)\n'
+    acl_access += 'acl localnet src 10.0.0.0/8		# RFC 1918 local private network (LAN)\n'
+    acl_access += 'acl localnet src 100.64.0.0/10		# RFC 6598 shared address space (CGN)\n'
+    acl_access += 'acl localnet src 169.254.0.0/16 	# RFC 3927 link-local (directly plugged) machines\n'
+    acl_access += 'acl localnet src 172.16.0.0/12		# RFC 1918 local private network (LAN)\n'
+    acl_access += 'acl localnet src 192.168.0.0/16		# RFC 1918 local private network (LAN)\n'
+    acl_access += 'acl localnet src fc00::/7       	# RFC 4193 local private network range\n'
+    acl_access += 'acl localnet src fe80::/10      	# RFC 4291 link-local (directly plugged) machines\n'
     acl_access += 'acl SSL_ports port 443\n'
-    acl_access += 'acl CONNECT method CONNECT\n'
-    acl_access += 'acl FTP proto FTP\n'
-    acl_access += 'acl HTTP proto HTTP\n'
+    acl_access += 'acl Safe_ports port 80		# http\n'
+    acl_access += 'acl Safe_ports port 21		# ftp\n'
+    acl_access += 'acl Safe_ports port 443		# https\n'
+    acl_access += 'acl Safe_ports port 70		# gopher\n'
+    acl_access += 'acl Safe_ports port 210		# wais\n'
+    acl_access += 'acl Safe_ports port 1025-65535	# unregistered ports\n'
+    acl_access += 'acl Safe_ports port 280		# http-mgmt\n'
+    acl_access += 'acl Safe_ports port 488		# gss-http\n'
+    acl_access += 'acl Safe_ports port 591		# filemaker\n'
+    acl_access += 'acl Safe_ports port 777		# multiling http\n'
 
     # MSN rules
-
-    acl_access += 'acl MSNICQGTALK_ports port 1863 5190 5222\n'
-    acl_access += \
-        'acl MSNICQGTALK_sites url_regex -i ^messenger.hotmail.com ^nexus.passport.com ^login.live.com ^gateway.messenger.hotmail.com ^login.oscar.aol.com talk.google.com .*messenger .*icq .*gtalk .*msn.com meebo.com iloveim.com ebuddy.commsn2go.com e-messenger.net imo.im messengerfx.com webmessenger.com e-messenger.com communicationtube.net msn2go.com webmessenger.com.br ebuddy.com e-buddy.com gateway.dll .microsoft.com  evsecure-crl.verisign.com crl.verisign.com mscrl.microsoft.com crl.microsoft.com\n'
-    acl_access += \
-        'acl MSN_mime req_mime_type -i ^application/x-msn-messenger\n'
+    #acl_access += \
+    #    'acl MSNICQGTALK_sites url_regex -i ^messenger.hotmail.com ^nexus.passport.com ^login.live.com ^gateway.messenger.hotmail.com ^login.oscar.aol.com talk.google.com .*messenger .*icq .*gtalk .*msn.com meebo.com iloveim.com ebuddy.commsn2go.com e-messenger.net imo.im messengerfx.com webmessenger.com e-messenger.com communicationtube.net msn2go.com webmessenger.com.br ebuddy.com e-buddy.com gateway.dll .microsoft.com  evsecure-crl.verisign.com crl.verisign.com mscrl.microsoft.com crl.microsoft.com\n'
+    #acl_access += \
+    #    'acl MSN_mime req_mime_type -i ^application/x-msn-messenger\n'
 
     for group_id in a.get_group_list():
         group = a.get_group(group_id)
@@ -543,7 +553,12 @@ def update():
 
     # cfg += 'http_access allow group_Padrao_http AuthenticatedUsers \n'
 
-    cfg += 'http_access deny all\n'
+    cfg += 'http_access allow localnet\nhttp_access allow localhost\n# Squid normally listens to port 3128\nhttp_port 3128\nhttp_access deny all\n'
+    cfg += 'coredump_dir /var/cache/squid\n'
+    cfg += 'refresh_pattern ^ftp:           1440    20%     10080\n'
+    cfg += 'refresh_pattern ^gopher:        1440    0%      1440\n'
+    cfg += 'refresh_pattern -i (/cgi-bin/|\?) 0     0%      0\n'
+    cfg += 'refresh_pattern .               0       20%     4320\n'
 
     cfg_file.writelines(cfg)
     cfg_file.close()
