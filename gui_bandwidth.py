@@ -105,10 +105,14 @@ def print_details_form(id, category, action):
     html_string += '<td class = "%s" align=left colspan=%s>\n' \
         % (row_format.get_next_row_class(), colspan)
     if category == CATEGORY_GROUPS:
-        html_string += \
-            '- O limite \xef\xbf\xbd para cada usu\xef\xbf\xbdrio/host do grupo.<br/>'
+#        html_string += \
+#            '- O limite \xef\xbf\xbd para cada usu\xef\xbf\xbdrio/host do grupo.<br/>'
+            html_string += \
+        '- O limite é para cada usuário/host do grupo.<br/>'
     html_string += \
-        '- O limite do usu\xef\xbf\xbdrio/host prevalece sobre o do grupo.'
+        '- O limite do usuário/host prevalece sobre o do grupo.'
+#    html_string += \
+#        '- O limite do usu\xef\xbf\xbdrio/host prevalece sobre o do grupo.'
 
     html_string += '<tr><td colspan="4" align="center">\n'
     if action == ACTION_EDIT_BANDWIDTH:

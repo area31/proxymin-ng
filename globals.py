@@ -48,8 +48,8 @@ IMAGE_DIR = 'images/'
 IMAGE_GET_VARIABLE = 'img'
 IMAGE_BALL_RED = 'ball_red'
 IMAGE_BALL_GREEN = 'ball_green'
-IMAGE_BALL_RED_FILE = 'ball_red.gif'
-IMAGE_BALL_GREEN_FILE = 'ball_green.gif'
+IMAGE_BALL_RED_FILE = '/proxymin/images/ball_red.gif'
+IMAGE_BALL_GREEN_FILE = '/proxymin/images/ball_green.gif'
 
 #ACTIONS (for use as GET-vars)
 ACTION_SHOW_MAIN = 'show_main'

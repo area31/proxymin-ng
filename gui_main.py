@@ -231,9 +231,10 @@ def display_bandwidth_limit_info(object):
     """display if bandwidth was seted"""
 
     if object.is_bandwidth_limit_disabled():
-        return '<img src="%s?%s=%s" style="vertical-align: middle;"> <font id="standard">%s</font>' \
-            % (IMAGE_SCRIPT, IMAGE_GET_VARIABLE, IMAGE_BALL_RED,
-               _('default'))
+#        return '<img src="%s?%s=%s" style="vertical-align: middle;"> <font id="standard">%s</font>' \
+        return '<img src="/proxymin/images/ball_green.gif" style="vertical-align: middle;"> <font id="standard">%s</font>' % (_('default'))
+#            % (IMAGE_SCRIPT, IMAGE_GET_VARIABLE, IMAGE_BALL_RED,
+#               _('default'))
     else:
         return '%s %s' % (object.bandwidth_limit, _('in kbytes'))
 
@@ -366,21 +367,28 @@ def print_object_table(category, letter, group):
         html_string += \
             '<td><table cellspacing="0" cellpadding="0" border=0"><tr><td>'
         if iterator.is_default_allow(object, PROTOCOL_HTTP):
-            html_string += '<img src="%s?%s=%s">' % (IMAGE_SCRIPT,
-                    IMAGE_GET_VARIABLE, IMAGE_BALL_GREEN)
+#            html_string += '<img src="%s?%s=%s">' % (IMAGE_SCRIPT,
+ #                   IMAGE_GET_VARIABLE, IMAGE_BALL_GREEN)
+            #html_string += '<img src="%s?%s=%s">' % (IMAGE_SCRIPT, IMAGE_GET_VARIABLE, IMAGE_BALL_GREEN)
+            html_string += '<img src="%s">' % (IMAGE_BALL_GREEN_FILE)
+
         else:
-            html_string += '<img src="%s?%s=%s">' % (IMAGE_SCRIPT,
-                    IMAGE_GET_VARIABLE, IMAGE_BALL_RED)
+#            html_string += '<img src="%s?%s=%s">' % (IMAGE_SCRIPT,
+#                    IMAGE_GET_VARIABLE, IMAGE_BALL_RED)
+            html_string += '<img src="%s">' % (IMAGE_BALL_RED_FILE)
+
         html_string += '</td><td>&nbsp;%s</td></tr></table></td>\n' \
             % display_protocol_info(object, category, PROTOCOL_HTTP)
         html_string += \
             '<td><table cellspacing="0" cellpadding="0" border=0"><tr><td>'
         if iterator.is_default_allow(object, PROTOCOL_FTP):
-            html_string += '<img src="%s?%s=%s">' % (IMAGE_SCRIPT,
-                    IMAGE_GET_VARIABLE, IMAGE_BALL_GREEN)
+#            html_string += '<img src="%s?%s=%s">' % (IMAGE_SCRIPT,
+#                    IMAGE_GET_VARIABLE, IMAGE_BALL_GREEN)
+            html_string += '<img src="%s">' % (IMAGE_BALL_GREEN_FILE)
         else:
-            html_string += '<img src="%s?%s=%s">' % (IMAGE_SCRIPT,
-                    IMAGE_GET_VARIABLE, IMAGE_BALL_RED)
+#            html_string += '<img src="%s?%s=%s">' % (IMAGE_SCRIPT,
+ #                  IMAGE_GET_VARIABLE, IMAGE_BALL_RED)
+            html_string += '<img src="%s">' % (IMAGE_BALL_RED_FILE)
         html_string += '<td>&nbsp;%s</td></tr></table></td>\n' \
             % display_protocol_info(object, category, PROTOCOL_FTP)
         if category != CATEGORY_GROUPS:

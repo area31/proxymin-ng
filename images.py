@@ -1,5 +1,3 @@
-#!/usr/bin/python3
-
 #proxymin - A Web-based administration frontend for the Squid Web proxy cache
 #Copyright (C) 2004  Mirjam Kuhlmann (proxymin@mikuhl.de)
 #Copyright (C) 2004  Clemens Hermann (proxymin@clhe.de)
@@ -25,7 +23,7 @@ import urllib
 from globals import *
 
 print ("Content-Type: image/gif")
-print
+print (
 
 # extract all POST and FORM values    
 form = cgi.FieldStorage()
@@ -39,5 +37,4 @@ if(image == IMAGE_BALL_RED):
 if(image == IMAGE_BALL_GREEN):
     image = urllib.urlopen(IMAGE_DIR + IMAGE_BALL_GREEN_FILE)
 
-sys.stdout.write(image.read())   
-            
+sys.stdout.write(image.read()))      
