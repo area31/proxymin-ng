@@ -1,0 +1,95 @@
+
+http_port 8080 transparent
+cache_mem 128 MB
+maximum_object_size 28192 KB
+cache_dir ufs /var/cache/squid 30000 16 256
+cache_access_log /var/log/squid/access.log
+cache_log /var/log/squid/cache.log
+cache_store_log none
+max_filedesc 4096
+hosts_file /etc/hosts
+dns_v4_first on
+
+
+ignore_expect_100 on
+
+refresh_pattern -i .*\.steamcontent.com/.*\.(pkg|esd|ipa|exe|ms[i|u|f]|asf|wm[v|a]|dat|zip|dsft) 4320 80% 432000 reload-into-ims
+refresh_pattern -i .*\.steampowered.com/.*\.(pkg|esd|ipa|exe|ms[i|u|f]|asf|wm[v|a]|dat|zip|dsft) 4320 80% 432000 reload-into-ims
+refresh_pattern -i .*\.adobe.com/.*\.(pkg|esd|ipa|exe|ms[i|u|f]|asf|wm[v|a]|dat|zip|dsft) 4320 80% 432000 reload-into-ims
+refresh_pattern -i swcdn.apple.com/.*\.(pkg|esd|ipa|exe|ms[i|u|f]|asf|wm[v|a]|dat|zip|dsft) 4320 80% 432000 reload-into-ims
+refresh_pattern -i .*\.apple.com/.*\.(pkg|esd|ipa|exe|ms[i|u|f]|asf|wm[v|a]|dat|zip|dsft) 4320 80% 432000 reload-into-ims
+refresh_pattern -i officecdn.microsoft.com.edgesuite.net/.*\.(cab|esd|exe|ms[i|u|f]|asf|wm[v|a]|dat|zip|dsft) 4320 80% 432000 reload-into-ims
+refresh_pattern -i update.microsoft.com/.*\.(cab|esd|exe|ms[i|u|f]|asf|wm[v|a]|dat|zip|dsft) 4320 80% 432000 reload-into-ims
+refresh_pattern -i microsoft.com/.*\.(cab|esd|exe|ms[i|u|f]|asf|wm[v|a]|dat|zip|dsft) 4320 80% 432000 reload-into-ims
+refresh_pattern -i windowsupdate.com/.*\.(cab|esd|exe|ms[i|u|f]|asf|wm[v|a]|dat|zip|dsft) 4320 80% 432000 reload-into-ims
+refresh_pattern -i windows.com/.*\.(cab|esd|exe|ms[i|u|f]|asf|wm[v|a]|dat|zip|dsft) 4320 80% 432000 reload-into-ims
+refresh_pattern -i c2r.microsoft.com/.*\.(cab|esd|exe|ms[i|u|f]|asf|wm[v|a]|dat|zip|dsft) 4320 80% 432000 reload-into-ims
+refresh_pattern -i download.windowsupdate.com/.*\.(cab|esd|exe|ms[i|u|f]|asf|wm[v|a]|dat|zip|dsft) 4320 80% 432000 reload-into-ims
+refresh_pattern -i .*\.download.windowsupdate.com/.*\.(cab|esd|exe|ms[i|u|f]|asf|wm[v|a]|dat|zip|dsft) 4320 80% 432000 reload-into-ims
+refresh_pattern -i i.imgur.com/.*\.(gif|cab|exe|ms[i|u|f]|asf|wm[v|a]|dat|zip|dsft) 4320 80% 432000 reload-into-ims
+refresh_pattern -i liveupdate.symantecliveupdate.com/.*\.(gif|cab|exe|ms[i|u|f]|asf|wm[v|a]|dat|zip|dsft) 4320 80% 432000 reload-into-ims
+###############################################################
+#novo padrão NTLM do squid.conf
+###################################################################################
+#Auth AD 
+# para quem esta logado em maquinas windows, aproveita a senha do logon
+auth_param ntlm children 180
+auth_param ntlm program /usr/bin/ntlm_auth --helper-protocol=squid-2.5-ntlmssp
+auth_param ntlm keep_alive on
+
+# para clientes nao windows, user/senha tem de ser solicitado
+auth_param basic program /usr/bin/ntlm_auth --helper-protocol=squid-2.5-basic
+auth_param basic children 5
+auth_param basic realm VIPNIX Proxy Server
+auth_param basic credentialsttl 2 hours
+acl password proxy_auth REQUIRED
+###################################################################################
+#
+#
+##novo padrão LDAP AUTH do squid.conf
+###################################################################################
+## Auth LDAP 
+#auth_param basic realm (VIPNIX): Autenticação de Usuário para Internet
+#auth_param basic program /usr/sbin/squid_ldap_auth -R -b "ou=Users,dc=vipnix,dc=com,dc=br" -f "uid=%s" -h 192.168.0.5 -D "cn=Administrador do Dominio,ou=Users,dc=vipnix,dc=com,dc=br" -w "naosei"
+#auth_param basic children 5
+#auth_param basic credentialsttl 5 minutes
+#acl USERS proxy_auth REQUIRED
+#http_access allow USERS
+###################################################################################
+######### Auth htpasswd #########
+auth_param basic children 5
+auth_param basic realm Proxy auth
+auth_param basic credentialsttl 2 hours
+auth_param basic program /usr/sbin/ncsa_auth /etc/squid/passwd
+acl password proxy_auth REQUIRED
+###############################################################
+
+acl manager proto cache_object
+acl localhost src 127.0.0.1/32
+http_access allow manager localhost
+log_access deny manager
+
+###############################################################
+
+acl direto url_regex "/etc/squid/direto.txt"
+no_cache deny direto
+always_direct allow direto
+acl NOPROXY dstdomain .cade.com.br vipnix.com.br
+no_cache deny NOPROXY
+
+###############################################################
+
+######### Liberação para todos #########
+acl liberados.fora.proxy url_regex -i "/etc/squid/liberados-fora-do-proxy.txt"
+http_access allow liberados.fora.proxy
+
+########## Bloqueio para todos #########
+acl bloqueados.fora.proxy url_regex -i "/etc/squid/bloqueados-full.txt"
+http_access deny bloqueados.fora.proxy
+###############################################################
+
+######### Liberação de horário de almoço #########
+#acl almoco time 12:00-14:00
+#http_access allow almoco
+
+###############################################################

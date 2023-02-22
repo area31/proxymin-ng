@@ -1,0 +1,170 @@
+--------
+proxymin  -  A Web-based administration frontend for the Squid Web proxy cache
+--------
+
+(c) 2004 Mirjam Kuhlmann<proxymin@mikuhl.de>, Clemens Hermann<proxymin@clhe.de>
+
+
+proxymin - README
+=================
+
+
+* Features:
+-----------
+
+- easy to use graphical interface to configure commonly needed Squid ACLs 
+- fine-grained permission management based on users/hosts/groups 
+- create/edit/delete/enable/disable users and hosts 
+- Protocols HTTP/HTTPS/FTP are currently supported 
+- multi language support 
+- user authentication based on standard NCSA auth 
+- tested with several hundreds of managed accounts 
+- self-contained database and policy compiler for easy porting to alternative proxys 
+
+This software is copyright and maintained by Mirjam Kuhlmann and Clemens Hermann. 
+It is licensed under the terms of the GPL.
+
+
+* Configuration:
+----------------
+
+The main page is devided into three part: groups, users and hosts.
+The first thing you should do is to create a group.
+
+Groups:
+  create new group:
+    - Group-ID: a unique name for the group
+    - Description: a meaningful one line description for the group (optional)
+  Details:
+      - adjust the group description
+  HTTP/FTP (configure HTTP/FTP permissions):
+    - Default: allowed or denied. If the default is allowed, any HTTP/FTP url can be
+               accessed by members of this group. You can deny URLs selectively
+               for the whole group (see URL(1), URL(2), ...) or for individual users.
+               If the default is denied it works the other way round.
+    - URL(1), URL(2), ...: the URLs that overwrite the default (allowed or denied).
+                           if the default is allowed then these URLs are denied and
+                           vice versa. Be careful when changing the default. Then the
+                           semantics of the URLs changes.
+                           Important: do not specify the protocol in the URL again:
+                           right: www.something.com
+                           wrong: http://www.something.com
+    - SSL (HTTP only): defines if https (ssl encrypted) sites can be accessed
+      - for SSL the same rules as for http are applied
+      - NOTE: https requests can only be filtered based on domain names/IPs. The reason 
+              for this is that the proxy just can see nothing but the host name/IP 
+              of the request (e.g. www.google.com).
+              So the rule www\.google\.de/search* would hit the request 
+              http://www.google.com/search?q=proxymin
+              but it would NOT hit the request
+              https://www.google.com/search?q=proxymin
+              Furthermore denied file types (extensions) can be downloaded via https.
+              The "problem" is protocol immanent as SSL not just encrypts the single 
+              pages but the whole communication between browser and web server. So the 
+              proxy just sees the target server (hence the host name), connects to it and 
+              forwards the bits in both directions (that includes the actual site request). 
+              The proxy does no longer see the complete page-/file- etc. request and thus 
+              can not filter the complete requests.
+    - Extensions: files with these extensions can not be accessed by members of the 
+                  group (you can deny the download of e.g. exe and zip files)
+    - delete: delete the group. At least one group must be left over and only groups
+              that have no members can be deleted.
+
+Users:
+  create new user:
+    - User-ID: a unique name for the user
+    - Description: a meaningful one line description for the user (optional)
+    - Group: select the group which the user belongs to. The permissions of this
+             group are applied to the user and can be partially overwritten
+    - Password: the password the user must enter before he/she can access websites
+    - active: enable/disable the user. A disabled user can not access the internet
+  Details:
+      - adjust the overall parameters of the user
+  HTTP/FTP (configure HTTP/FTP permissions):
+    - URL(1), URL(2), ...: the URLs that overwrite the groups default (allowed or denied)
+                           Important: do not specify the protocol in the URL again:
+                           right: www.something.com
+                           wrong: http://www.something.com
+    - SSL (HTTP only): defines if ssl is allowed for the user.  To retreive this parameter
+                       from the group default use "as group" 
+    - delete: delete the user
+
+Hosts:
+  create new host:
+    - IP-Address: the IP-Address of the host
+    - Description: a meaningful one line description for the host (optional)
+    - Group: select the group which the host belongs to. The permissions of this
+             group are applied to the host and can be partially overwritten
+    - active: enable/disable the host. A disabled host can not access the internet
+  Details:
+      - adjust the overall parameters of the host
+  HTTP/FTP (configure HTTP/FTP permissions):
+    - analogous to user
+
+
+* Rule precedence:
+-------------------
+
+- Group permissions vs. User/Host permissions
+  - the main permissions for all members should be configured in the group section
+  - if you want to deny specific types of files this is only possible via group rules (extensions)
+  - to make exceptions to the group rules for users or hosts just configure the http/ftp permission
+    for the specific user/host.
+  - user/host rules overwrite the group permissions the user/host belongs to. E.g. if the group
+    denies access to www.google.com and a member of this group has this url configured as allowed
+    then this member can access www.google.com even if the group rules deny the access. 
+
+- Users/Hosts:
+  - if a host is configured, then no login window is displayed and the host/group permissions apply
+  - if a requesting host is not configured a login window (user/password) is displayed. 
+  - permissions for hosts are especially useful for serves, e.g. to update the virus scanner 
+    database via the proxy without having the server to do some kind of proxy login.
+    
+
+* Permissions:
+--------------
+
+the URLs, file extensions, etc. are interpreted as regular expressions. So if you allow the url 
+go.nothing.com this will fit "go.nothing.com" but as "." is a wildcard for any letter also 
+gotnothing.com will fit. For an Intro to regular expressions have a look at one of the 
+following URLs:
+http://www.newbie.org/gazette/xxaxx/xprmnt02.html
+http://jmason.org/software/sitescooper/tao_regexps.html
+a few examples how to use regular expressions to match URLs:
+
+- match www.python.org:
+  www\.python\.org
+- match any subdomain of python.org (info.python.org, news.python.org, www.python.org etc.):
+  .*\.python\.org
+- match www.python.org and news.python.org:
+  (www|news)\.python\.org
+- match any URL that starts with "www.":
+  www\..*
+- match any URL in the ".org" domain:
+  .*\.org(/.*)?
+- match www.python.com and www.python.org and www.python.net:
+  www\.python\.(com|org|net)
+
+
+
+* Internationalization:
+  ---------------------
+
+- Supported languages: Brazilian Portuguese, Deutsch, English
+- the language can be selected in proxymin.conf
+
+it is easy to add more languages. Just open the file lang/lang_de as template. Try to avoid
+using an already translated file as template as translation errors might be propagated. 
+Each line contains one expression in the form 'english original'::'translation'. Translate 
+each line  so that the translation (the string after "::") corresponds to the english 
+original string in your language.
+The first lines should tell which language the file matches and your name and email-addresse
+so you can be contacted in case new expressions are added.
+Now save the file in the "lang" directory as "lang_countrycode" where "countycode" is the code
+of your language (en for english, de for german, fr for french etc.).
+Adjust the language parameter in proxymin.conf and try it out.
+Now please do not forget to email the file to proxymin@clhe.de so your language file can be
+included into the official distribution.
+
+
+for your suggestions, requests and bugfixes please send an email to proxymin@clhe.de

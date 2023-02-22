@@ -1,0 +1,4 @@
+DirectoryIndex index.php
+Options +ExecCGI +FollowSymLinks
+AddHandler cgi-script .py
+

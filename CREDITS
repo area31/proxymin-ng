@@ -1,0 +1,19 @@
+--------
+proxymin -  A Web-based administration frontend for the Squid Web proxy cache
+--------
+
+(c) 2004 Mirjam Kuhlmann<proxymin@mikuhl.de>, Clemens Hermann<proxymin@clhe.de>
+
+CREDITS, in chronological order
+-------------------------------
+
+[om] - Olivier Mueller <om@omnis.ch>
+        * omail-admin (http://omail.omnis.ch/omail-admin/) inspired the gui
+
+[mw] - Mark Wilton-Jones
+        * http://www.howtocreate.co.uk/perfectPopups.html
+
+[ds] - Daniel Serafim <falecom@deltamidia.com>
+        * Brazilian Portuguese language file
+        * bug reports
+        * beta testing

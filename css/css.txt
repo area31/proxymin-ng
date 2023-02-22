@@ -1,0 +1,103 @@
+<style type="text/css">
+<!--
+body {
+    font-family: arial, helvetica, geneva, sans-serif;
+    font-size: x-small;
+    background-color: #FFFFFF
+}
+
+th {
+    font-size: x-small; 
+    font-weight: bold; 
+    background-color: #D3DCE3; 
+    vertical-align: middle
+}
+
+td {
+    font-size: x-small
+}
+
+a { 
+    text-decoration:none; 
+    color:#0000FF
+}
+
+a:hover {
+    text-decoration:underline; 
+    color: #FF0000
+}
+
+table.tabs {
+    border-top: none;
+    border-right: none;
+    border-left: none;
+    border-bottom: 1px solid #666;
+    text-align: left;
+    align:center
+}
+
+td.tab {
+    border-top: 1px solid #999;
+    border-right: 1px solid #666;
+    border-left: 1px solid #999;
+    border-bottom: none;
+    border-radius: 2px;
+    -moz-border-radius: 2px;
+    text-align: center;
+    font-weight:bold
+}
+
+.titlebar {
+    font-color:#000000;
+    background-color:#cccccc
+}
+
+.statusbar {
+    text-align:left; 
+    background-color:#eeeeee
+}
+
+.title {
+    text-align:left; 
+    font-size:large;
+    font-weight:bold;
+}
+.links {
+    text-align:right; 
+}
+
+.tr.even {
+    background-color:#DDDDDD;
+    text-align:left; 
+}
+.tr.odd {
+    background-color:#CCCCCC;
+    text-align:left; 
+}
+
+font.footer {
+    size:x-small;
+    color:#AAAAAA; 
+}
+
+input.url {
+    width:300px;
+}
+
+input.description {
+    width:350px;
+}
+
+input.extension {
+    width:100px;
+}
+
+#active { background-color:#B0C4DE; }
+#inactive { background-color:#E6E6FA; }
+#enabled { color:green; }
+#standard { color:black; }
+#changed { color:9900CC; }
+#disabled { color:red; }
+
+//-->
+</style>

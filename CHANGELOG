@@ -1,0 +1,29 @@
+--------
+proxymin  -  A Web-based administration frontend for the Squid Web proxy cache
+--------
+
+(c) 2004 Mirjam Kuhlmann<proxymin@mikuhl.de>, Clemens Hermann<proxymin@clhe.de>
+
+
+proxymin - CHANGELOG 
+====================
+all noteworthy changes and enhancements for proxymin are listed here.
+Our Thanks to all those people who've contributed bug reports and code
+fixes.
+
+Legend:
+
+# -> Bug Fix
++ -> Addition
+! -> Change
+- -> Removed
+* -> Note
+
+------------------------------ v1.0rc2 Released ------------------------------
+------------------------------------------------------------------------------
+16-Nov-2004 Clemens Hermann <proxymin@clhe.de>
+ + Added this CHANGELOG file
+ + Added language file for Brazilian Portuguese
+ # Fixed some minor i18n issues in gui_permission_details.py
+ # Fixed an unintentional line break in gui_permission_details.py
+------------------------------ v1.0rc2 Released ------------------------------

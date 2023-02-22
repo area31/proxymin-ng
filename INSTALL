@@ -1,0 +1,90 @@
+--------
+proxymin  -  A Web-based administration frontend for the Squid Web proxy cache
+--------
+
+(c) 2004 Mirjam Kuhlmann<proxymin@mikuhl.de>, Clemens Hermann<proxymin@clhe.de>
+
+
+proxymin - INSTALL
+=================
+
+
+* You will need:
+  --------------
+
+- Python version 2.3.3 or later
+  http://www.python.org
+
+- a recent version of the Squid Web Proxy Cache
+  http://www.squid-cache.org/
+
+- a recent version of sudo
+  http://www.courtesan.com/sudo/
+  
+- apache 1.3.x or later
+  http://www.apache.org/httpd.html
+
+
+
+* Installation
+  ------------
+
+  1. install python, squid, apache and sudo.
+
+  2. make sure apache is up and running properly.
+
+  3. make sure squid is up and running properly. Test carefully if you can
+     use the proxy from a client browser before you proceed.
+
+  4. configure sudo: your CGI user must be allowed to restart squid after
+     the configuration has been changed. As the www/cgi user has not root
+     privileges we use sudo to selectively allow this user to restart squid as
+     needed. Have a look into your apache config to find out as which UID your
+     CGIs run (here it is user www but ymmv).
+     Now use visudo to allow the CGI user to restart squid. 
+     For starters: a line like the following might do the trick but make sure
+     you know what you are doing ...
+     =========================<snip>=========================
+     www	ALL = NOPASSWD: /usr/local/sbin/squid
+     =========================<snap>=========================
+
+  5. create an empty password file and make sure your CGI user has read/write
+     permissions on this file (e.g. /usr/local/etc/squid/passwd).
+
+  6. create a squid configuration template: proxymin is only responsible for
+     user management and permissions (ACLs in squid language). So the big 
+     majority of the squid configuration (like cache configuation, logging etc.) 
+     has nothing to do with proxymin. Have a look at your squid.conf and create
+     a "configuration template". This is nothing more than a normal squid.conf 
+     file that does not include ACL configuration as that will be append later
+     by proxymin. You can find a (very short, probably too short!) example for a
+     squid.conf template in the proxymin distribution. The auth_param basic program
+     path in the template must be adjusted to fit your setup.
+     Now put this template somewhere for later usage 
+     (e.g. /usr/local/etc/squid/squid.conf.template).
+ 
+  7. now install proxymin somewhere in your apache CGI directory (here this is 
+     /usr/local/www/cgi-bin). Make sure the path/to/python is correct for your
+     os in the first line of proxymin.py and images.py.
+     Also remember to set the file/directory permissions so that they can be 
+     executed by your webserver (755 might be a good choice).
+    
+
+  8. open proxymin.conf and adjust the parameters as necessary.
+     - squid_cfg: the squid.conf file (main squid configuration). Your CGI user must 
+       have write permissions for this file.
+     - static_cfg: path to the squid configuration template you created in (6)
+     - htpasswd_file: the squid password file you created in (5)
+     - squid_reconfigure_command: the correct paths to sudo and squid
+
+  9. open proxymin.py in your browser and have fun administrating your proxy :)
+
+ NOTE: 
+     If you want to import existing users then htpasswd_import.py is for you. Make sure 
+     proxymin is running correctly before you proceed.
+     Open htpasswd_import.py and set PASSWD_SOURCE to the path of your existing password 
+     file.
+     Furthermore set GROUP to a valid group ID you already created in proxymin.
+     Now execute "python htpasswd_import.py".
+     Your users should now be available in proxymin. Adjust the group (all are member of
+     the group you specified), description etc.
