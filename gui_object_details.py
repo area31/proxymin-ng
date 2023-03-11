@@ -252,4 +252,5 @@ def print_details_form(category,action, id='', description='', group='', active=
     html_string += '</body>\n'
     html_string += '<script>resizeWinTo(\'resize_div\');</script>\n'
     html_string += '</html>'
-    print html_string
+    print(html_string)
+
