@@ -12,40 +12,35 @@ from globals import *
 from localization import _
 
 #Criar objeto iterator, usando a classe objectierator.py, setando a categoria GROUPS (possiveis(GROUPS, HOSTS, USERS)
-iterator = objectiterator.ObjectIterator(CATEGORY_USERS)
+iterator = objectiterator.ObjectIterator(CATEGORY_HOSTS)
 
-#Objeto que vai utilizar o ID como o nome do grupo (Grupo-ID)
-#object = iterator.get_object('Bloqueado')
-#object = iterator.get_object('testando')
-
-# Pegar usuarios da arvore do AD
+# Pegar hosts da arvore do AD
 #sys.exec("net rpc user -U proxyinternet%Proxymegapass26910 -S scbdc01")
 #userlist = os.popen("net rpc user -U proxyinternet%Proxymegapass26910 -S scbdc01 >/tmp/userlist.txt")
 
-#Ler arquivo com users e inserir na base
+#Ler arquivo com hosts e inserir na base
 #Abrir arquivo
-filehandleit=open('/tmp/userlist.txt', 'r')
+filehandleit=open('/tmp/hostlist.txt', 'r')
 #Ler cada linha
-for usuario in filehandleit:
+for host in filehandleit:
         #Remover os ultimos 2 caracteres de line (\r e \n)
-        usuario = usuario[:-1]
-        #Se usuario existir, abortar
-        if not(iterator.get_object(usuario)):
-                category='hosts'
-                description=''
-                group='Liberado'
-                active='checked'
-                gui_object_details.save_input_data(category, usuario, description, group, active)
-                #iterator.add_object(usuario)
-                #object = iterator.get_object(usuario)
-                #object.set_description('')
-                #object.set_group('Bloqueado')
-                #object.enable()
-                #iterator.update_object(object)
-                print("Usuario " + usuario + " inserido")
+        host = host[:-1]
+        #Se host existir, abortar
+        if iterator.get_object(host):
+            print("Host " + host + " já existe na base de dados. Ignorando.")
+            continue
+        category='hosts'
+        description=''
+        group='Liberado'
+        active='checked'
+        gui_object_details.save_input_data(category, host, description, group, active)
+        #iterator.add_object(host)
+        #object = iterator.get_object(host)
+        #object.set_description('')
+        #object.set_group('Bloqueado')
+        #object.enable()
+        #iterator.update_object(object)
+        print("Host " + host + " inserido")
 
 #Commit
-#iterator.update_object(object)
-
-#DONE
 
